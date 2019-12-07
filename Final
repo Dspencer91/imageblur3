@@ -1,0 +1,45 @@
+class Image
+  def initialize (image)
+    @image = image
+  end
+
+  def output_image
+    @image.each do |p|
+      puts p.join
+    end
+  end
+
+  def blur(distance)
+    result_img = []
+    #Prepare the array with empty rows
+    @image.each do |row|
+      result_img.push(Array.new(row.size,0))
+    end
+
+    @image.each_with_index do |row, row_index|
+      row.each_with_index do |px, col_index|
+        if px == 1
+          result_img[row_index][col_index]=1
+          result_img[row_index-1][col_index]=1 if row_index > 0
+          result_img[row_index][col_index-1]=1 if col_index > 0
+          result_img[row_index][col_index+1]=1 if col_index < row.size-1
+          result_img[row_index+1][col_index]=1 if row_index < @image.size-1
+        end
+      end
+    end
+    return Image.new(result_img)
+  end
+end
+
+image = Image.new ([
+  [0,0,0,0],
+  [0,1,0,0],
+  [0,0,0,0],
+  [0,0,1,0]
+  ])
+
+  img = Image.new([[0,0,0,0,0,0],
+  [0,0,0,0,0,0],[0,0,0,1,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]])
+img.output_image
+puts " "
+img.blur(2).output_image
